@@ -1,0 +1,39 @@
+import random
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing import image
+
+
+class_names = sorted(os.listdir("/content/dataset/filtered_lfw"))
+
+for i in range(5):
+    class_name = random.choice(class_names)
+    class_path = f"/content/dataset/filtered_lfw/{class_name}"
+
+    img_name = random.choice(os.listdir(class_path))
+    img_path = os.path.join(class_path, img_name)
+
+    img = image.load_img(img_path, target_size=(128,128))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    
+
+    predictions = model.predict(img_array)
+    predicted_class = class_names[np.argmax(predictions)]
+
+
+      
+    plt.figure(figsize=(5,5))
+    plt.imshow(img)
+
+    if predicted_class == class_name:
+          title_color = "green"
+          result = " CORRECT"
+    else:
+          title_color = "red"
+          result = " WRONG"
+
+    plt.title(f"Actual: {class_name}\nPredicted: {predicted_class}\n{result}", color=title_color)
+    plt.axis("off")
+    plt.show()
